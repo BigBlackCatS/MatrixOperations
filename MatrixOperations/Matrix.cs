@@ -164,6 +164,116 @@ namespace MatrixOperations
 			return det;
 		}
 
+		/// <summary>
+		/// Find the sum of two matrices
+		/// </summary>
+		/// <param name="matrix1">First matrix</param>
+		/// <param name="matrix2">Second matrix</param>
+		/// <exception cref="InvalidOperationException">Dimension of the first matrix is not equal dimension of the second matrix</exception>
+		/// <returns></returns>
+		public static Matrix operator +(Matrix matrix1, Matrix matrix2)
+		{
+			if (matrix1.Rows != matrix2.Rows
+					|| matrix1.Columns != matrix2.Columns)
+			{
+				throw new InvalidOperationException();
+			}
+
+			Matrix sum = new Matrix(matrix1.Rows, matrix1.Columns);
+			for (int i = 0; i < sum.Rows; i++)
+				for (int j = 0; j < sum.Columns; j++)
+					sum[i, j] = matrix1[i, j] + matrix2[i, j];
+
+			return sum;
+		}
+
+		/// <summary>
+		/// Find the difference of two matrices
+		/// </summary>
+		/// <param name="matrix1">First matrix</param>
+		/// <param name="matrix2">Second matrix</param>
+		/// <exception cref="InvalidOperationException">Dimension of the first matrix is not equal dimension of the second matrix</exception>
+		/// <returns></returns>
+		public static Matrix operator -(Matrix matrix1, Matrix matrix2)
+		{
+			if (matrix1.Rows != matrix2.Rows
+					|| matrix1.Columns != matrix2.Columns)
+			{
+				throw new InvalidOperationException();
+			}
+
+			Matrix sub = new Matrix(matrix1.Rows, matrix1.Columns);
+			for (int i = 0; i < sub.Rows; i++)
+				for (int j = 0; j < sub.Columns; j++)
+					sub[i, j] = matrix1[i, j] - matrix2[i, j];
+
+			return sub;
+		}
+
+		/// <summary>
+		/// Find the product of two matrices
+		/// </summary>
+		/// <param name="matrix1">First matrix</param>
+		/// <param name="matrix2">Second matrix</param>
+		/// <exception cref="InvalidOperationException">Column count of the first matrix is not equal row count of the second matrix</exception>
+		/// <returns></returns>
+		public static Matrix operator *(Matrix matrix1, Matrix matrix2)
+		{
+			if (matrix1.Columns != matrix2.Rows)
+			{
+				throw new InvalidOperationException();
+			}
+
+			Matrix mul = new Matrix(matrix1.Rows, matrix2.Columns);
+
+			for (int i = 0; i < mul.Rows; i++)
+				for (int j = 0; j < mul.Columns; j++)
+					for (int k = 0; k < matrix1.Columns; k++)
+						mul[i, j] += matrix1[i, k] * matrix2[k, j];
+
+			return mul;
+		}
+
+		/// <summary>
+		/// Find the product matrix and numeric
+		/// </summary>
+		/// <param name="matrix">Matrix</param>
+		/// <param name="numeric">Numeric</param>
+		/// <returns></returns>
+		public static Matrix operator *(Matrix matrix, double numeric)
+		{
+			Matrix mul = new Matrix(matrix.Rows, matrix.Columns);
+
+			for (int i = 0; i < mul.Rows; i++)
+				for (int j = 0; j < mul.Columns; j++)
+					mul[i, j] = matrix[i, j] / numeric;
+
+			return mul;
+		}
+
+		/// <summary>
+		/// Find the division matrix to numeric
+		/// </summary>
+		/// <param name="matrix">Matrix</param>
+		/// <param name="numeric">Numeric</param>
+		/// <exception cref="DivideByZeroException">Numeric is 0</exception>
+		/// <returns></returns>
+		public static Matrix operator /(Matrix matrix, double numeric)
+		{
+			if (numeric == 0)
+			{
+				throw new DivideByZeroException();
+			}
+
+			Matrix mul = new Matrix(matrix.Rows, matrix.Columns);
+
+			for (int i = 0; i < mul.Rows; i++)
+				for (int j = 0; j < mul.Columns; j++)
+					mul[i, j] = matrix[i, j] / numeric;
+
+			return mul;
+		}
+
 		IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 
 		public IEnumerator<double> GetEnumerator()
