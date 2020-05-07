@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace MatrixOperations
 {
-	public class Matrix : IEnumerable<double>
+	public class Matrix : IEnumerable<double>, ICloneable
 	{
 		/// <summary>
 		/// Integer that defines row's count of matrix
@@ -88,6 +88,22 @@ namespace MatrixOperations
 			}
 
 			_lastRowIndex++;
+		}
+
+	
+		public object Clone()
+		{
+			var matrix = new Matrix(Rows, Columns);
+
+			for (int i = 0; i < Rows; i++)
+			{
+				for (int j = 0; j < Columns; j++)
+				{
+					matrix[i, j] = this[i, j];
+				}
+			}
+
+			return matrix;
 		}
 	}
 }
