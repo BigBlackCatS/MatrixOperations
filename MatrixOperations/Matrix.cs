@@ -58,6 +58,112 @@ namespace MatrixOperations
 			private set => _columns = value > 0 ? value : 0;
 		}
 
+		/// <summary>
+		/// Find the inverse matrix to the instance matrix
+		/// </summary>
+		/// <exception cref="InvalidOperationException">Matrix is not square</exception>
+		/// <returns></returns>
+		public Matrix Inverse()
+		{
+			if (Rows != Columns)
+			{
+				throw new InvalidOperationException();
+			}
+
+			var matrix = (Matrix)Clone();
+
+			double multi, dev;
+
+			var inverse = new Matrix(Rows, Columns);
+
+			for (int i = 0; i < Rows; i++)
+				inverse[i, i] = 1;
+
+			for (int i = 0; i < Rows; i++)
+			{
+				dev = matrix[i, i];
+
+				for (int k = 0; k < Columns; k++)
+				{
+					inverse[i, k] /= dev;
+					matrix[i, k] /= dev;
+				}
+
+				for (int j = 0; j < Rows; j++)
+				{
+					if (i != j)
+					{
+						multi = matrix[j, i];
+
+						for (int k = 0; k < Columns; k++)
+						{
+							inverse[j, k] = -inverse[i, k] * multi + inverse[j, k];
+							matrix[j, k] = -matrix[i, k] * multi + matrix[j, k];
+						}
+					}
+				}
+			}
+
+			return inverse;
+		}
+
+		/// <summary>
+		/// Find the determinant of the instance matrix
+		/// </summary>
+		/// <exception cref="InvalidOperationException">Matrix is not square</exception>
+		/// <returns></returns>
+		public double Determinant()
+		{
+			if (Rows != Columns)
+			{
+				throw new InvalidOperationException();
+			}
+
+			var matrix = (Matrix)Clone();
+			double multi, dev;
+			double det = 1;
+
+			for (int i = 0; i < Rows; i++)
+			{
+				if (matrix[i, i] == 0)
+				{
+					var index = i == Rows - 1
+						? i - 1
+						: i + 1;
+
+					for (int j = 0; j < Columns; j++)
+					{
+						double temp = -matrix[i, j];
+						matrix[i, j] = matrix[index, j];
+						matrix[index, j] = temp;
+					}
+				}
+			}
+
+			for (int i = 0; i < Rows; i++)
+			{
+				dev = matrix[i, i];
+
+				for (int j = 0; j < Rows; j++)
+				{
+					if (i != j)
+					{
+						multi = matrix[j, i];
+
+						for (int k = 0; k < Columns; k++)
+						{
+							matrix[j, k] = -matrix[i, k] / dev * multi + matrix[j, k];
+						}
+					}
+				}
+			}
+
+			for (int i = 0; i < Rows; i++)
+				det *= matrix[i, i];
+
+			return det;
+		}
+
 		IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 
 		public IEnumerator<double> GetEnumerator()
