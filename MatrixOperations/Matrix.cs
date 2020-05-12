@@ -274,6 +274,21 @@ namespace MatrixOperations
 			return mul;
 		}
 
+		/// <summary>
+		/// Find the transpose of a matrix
+		/// </summary>
+		/// <returns></returns>
+		public Matrix T()
+		{
+			Matrix t = new Matrix(Columns, Rows);
+
+			for (int i = 0; i < t.Rows; i++)
+				for (int j = 0; j < t.Columns; j++)
+					t[i, j] = this[j, i];
+
+			return t;
+		}
+
 		IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 
 		public IEnumerator<double> GetEnumerator()
