@@ -21,6 +21,11 @@ namespace MatrixOperations
 		/// </summary>
 		private double[,] _matrix;
 
+		/// <summary>
+		/// Create Matrix instance
+		/// </summary>
+		/// <param name="rows">Count rows of the matrix</param>
+		/// <param name="columns"></param>
 		public Matrix(int rows, int columns)
 		{
 			Rows = rows;
@@ -400,5 +405,67 @@ namespace MatrixOperations
 
 			return matrix;
 		}
+	}
+
+	static class MatrixCasting
+	{
+		/// <summary>
+		/// Convert two-dimensional array to matrix
+		/// </summary>
+		/// <param name="array"></param>
+		/// <returns></returns>
+		public static Matrix ToMatrix(this double[,] array)
+		{
+			var matrix = new Matrix(array.GetLength(0), array.GetLength(1));
+
+			for (int i = 0; i < matrix.Rows; i++)
+			{
+				for (int j = 0; j < matrix.Columns; j++)
+				{
+					matrix[i, j] = array[i, j];
+				}
+			}
+
+			return matrix;
+		}
+
+		/// <summary>
+		/// Convert array to matrix
+		/// </summary>
+		/// <param name="array"></param>
+		/// <param name="vectorType">Row vector or column vector type</param>
+		/// <returns></returns>
+		public static Matrix ToMatrix(this double[] array, VectorType vectorType)
+		{
+			var isRow = vectorType == VectorType.Row;
+
+			var matrix = new Matrix(isRow ? 1 : array.Length, isRow ? array.Length : 1);
+
+			for (int i = 0; i < matrix.Rows; i++)
+			{
+				for (int j = 0; j < matrix.Columns; j++)
+				{
+					matrix[i, j] = isRow ? array[j] : array[i];
+				}
+			}
+
+			return matrix;
+		}
+
+		/// <summary>
+		/// Convert number to matrix
+		/// </summary>
+		/// <param name="number"></param>
+		/// <returns></returns>
+		public static Matrix ToMatrix(this double number)
+		{
+			return new Matrix(1, 1) { number };
+		}
+	}
+
+	public enum VectorType
+	{
+		Row,
+		Column
 	}
 }
