@@ -280,13 +280,63 @@ namespace MatrixOperations
 		/// <returns></returns>
 		public Matrix T()
 		{
-			Matrix t = new Matrix(Columns, Rows);
+			var t = new Matrix(Columns, Rows);
 
 			for (int i = 0; i < t.Rows; i++)
 				for (int j = 0; j < t.Columns; j++)
 					t[i, j] = this[j, i];
 
 			return t;
+		}
+
+		/// <summary>
+		/// Convert matrix to two-dimensional array
+		/// </summary>
+		/// <returns></returns>
+		public double[,] ToTwoDimArray()
+		{
+			var array = new double[Rows, Columns];
+
+			for (int i = 0; i < array.GetLength(0); i++)
+				for (int j = 0; j < array.GetLength(1); j++)
+					array[i, j] = this[i, j];
+
+			return array;
+		}
+
+		/// <summary>
+		/// Convert row vector or column vector to array
+		/// </summary>
+		/// <returns></returns>
+		public double[] ToArray()
+		{
+			if (Rows != 1 && Columns != 1)
+			{
+				throw new InvalidOperationException();
+			}
+
+			int arrayLength = Rows != 1 ? Rows : Columns;
+
+			var array = new double[arrayLength];
+
+			for (int i = 0; i < arrayLength; i++)
+				array[i] = Rows != 1 ? this[i, 0] : this[0, i];
+
+			return array;
+		}
+
+		/// <summary>
+		/// Convert Matrix to number
+		/// </summary>
+		/// <returns></returns>
+		public double ToNumber()
+		{
+			if (Rows != 1 || Columns != 1)
+			{
+				throw new InvalidOperationException();
+			}
+
+			return this[0, 0];
 		}
 
 		IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
