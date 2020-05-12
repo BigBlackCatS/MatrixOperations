@@ -59,6 +59,23 @@ namespace MatrixOperations
 		}
 
 		/// <summary>
+		/// Find identity matrix of specified size
+		/// </summary>
+		/// <param name="size">Size of identity matrix</param>
+		/// <returns></returns>
+		public static Matrix GetIdentityMatrix(int size)
+		{
+			var matrix = new Matrix(size, size);
+
+			for (int i = 0; i < size; i++)
+			{
+				matrix[i, i] = 1;
+			}
+
+			return matrix;
+		}
+
+		/// <summary>
 		/// Find the inverse matrix to the instance matrix
 		/// </summary>
 		/// <exception cref="InvalidOperationException">Matrix is not square</exception>
@@ -74,10 +91,7 @@ namespace MatrixOperations
 
 			double multi, dev;
 
-			var inverse = new Matrix(Rows, Columns);
-
-			for (int i = 0; i < Rows; i++)
-				inverse[i, i] = 1;
+			var inverse = GetIdentityMatrix(Rows);
 
 			for (int i = 0; i < Rows; i++)
 			{
